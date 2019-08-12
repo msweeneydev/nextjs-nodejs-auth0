@@ -1,5 +1,4 @@
 const request = require('request-promise');
-// const verify = require('../_token/verify');
 
 module.exports = async (req, res) => {
   const options = {
@@ -19,14 +18,8 @@ module.exports = async (req, res) => {
   console.log('BODYYYYY', auth);
   if (!auth.error) {
     res.writeHead(302, {
-      Location: '/'
+      Location: `/?id=${auth.id_token}&token=${auth.access_token}`
     });
     res.end();
   }
 };
-
-// request(options, function(error, response, body) {
-//     if (error) throw new Error(error);
-
-//     console.log(body);
-//   });
