@@ -19,11 +19,11 @@ export default withRouter(({ router }) => {
   }
   const [auth, setAuth] = useState([]);
   useEffect(() => {
-    async function getPosts() {
+    async function getAuth() {
       const isAuth = Cookies.get('token');
       setAuth(!!isAuth);
     }
-    getPosts();
+    getAuth();
   }, []);
   console.log(auth);
   return (
