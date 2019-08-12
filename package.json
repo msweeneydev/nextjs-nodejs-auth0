@@ -1,0 +1,24 @@
+{
+  "name": "nextjs-node-auth0",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:msweeneydev/nextjs-node-auth0.git",
+  "author": "msweeneydev <mail@msweeneydev.com>",
+  "license": "MIT",
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^1.6.0",
+    "next": "^9.0.3",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
+  },
+  "scripts": {
+    "dev": "next",
+    "build": "next build"
+  },
+  "engines": {
+    "node": ">=0.10.3"
+  }
+}
