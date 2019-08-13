@@ -28,8 +28,6 @@ export default () => {
     }
     getAuth();
   }, [id, logout, token]);
-  console.log('AUTH', auth);
-  console.log('PROFILE', profile);
   return (
     <main>
       <h1>Hello World</h1>
