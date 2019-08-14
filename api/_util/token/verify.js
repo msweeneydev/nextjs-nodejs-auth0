@@ -16,26 +16,20 @@ module.exports = async req => {
     maxAge: '1 day'
   };
   const { authorization } = req.headers;
-  console.log('TOKEN', authorization);
   async function verify() {
     if (authorization) {
-      let data;
       const token = authorization.split(' ')[1];
       try {
-        jwt.verify(token, getKey, options, function(err, decoded) {
-          if (decoded) {
-            console.log('DECODED', decoded);
-            data = decoded;
-          }
-          console.log('ERROR', err);
-        });
+        jwt.verify(token, getKey, options, getData);
       } catch (err) {
         console.log('ERROR', err);
       }
-      return data;
     }
   }
-  const result = await verify();
-  console.log('RESULT', result);
-  return result;
+  function getData(err, decoded) {
+    console.log('gderr', err);
+    console.log('gddecode', decoded);
+    return decoded;
+  }
+  return await verify();
 };
