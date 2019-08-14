@@ -1,6 +1,12 @@
 const verify = require('../_util/token/verify');
 
 module.exports = async (req, res) => {
-  const decoded = await verify(req);
-  console.log(await decoded);
+  isVerified = (err, decoded) => {
+    if (!err) {
+      res.send('VERIFIED');
+    } else {
+      res.send('UNVERIFIED');
+    }
+  };
+  verify(req, isVerified);
 };
