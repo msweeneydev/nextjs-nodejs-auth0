@@ -28,6 +28,14 @@ export default () => {
     }
     getAuth();
   }, [id, logout, token]);
+  const getSecret = async () => {
+    const res = await fetch('/api/data/secret', {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('token')}`
+      }
+    });
+  };
+  console.log('PROFILE', profile);
   return (
     <main>
       <h1>Hello World</h1>
@@ -36,11 +44,7 @@ export default () => {
           <button>{!auth ? 'Login' : 'Logout'}</button>
         </a>
       </Link>
-      <Link href="/api/data/secret/">
-        <a>
-          <button>Secret Data</button>
-        </a>
-      </Link>
+      <button onClick={getSecret}>Secret Data</button>
     </main>
   );
 };
