@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import parseJwt from '../lib/parseJwt';
@@ -34,17 +35,30 @@ export default () => {
         Authorization: `Bearer ${Cookies.get('token')}`
       }
     });
+    const secret = await res.text();
+    const newProfile = { ...profile, secret };
+    setProfile(newProfile);
   };
-  console.log('PROFILE', profile);
   return (
-    <main>
-      <h1>Hello World</h1>
-      <Link href={`/api/auth/${!auth ? 'login' : 'logout'}/`}>
-        <a>
-          <button>{!auth ? 'Login' : 'Logout'}</button>
-        </a>
-      </Link>
-      <button onClick={getSecret}>Secret Data</button>
-    </main>
+    <>
+      <Head>
+        <title>Next.js + Node.js + Auth0</title>
+        <link
+          rel="stylesheet"
+          href="https://css.zeit.sh/v1.css"
+          type="text/css"
+        />
+      </Head>
+      <main>
+        <h1>Next.js + Node.js + Auth0</h1>
+        <Link href={`/api/auth/${!auth ? 'login' : 'logout'}/`}>
+          <a>
+            <button>{!auth ? 'Login' : 'Logout'}</button>
+          </a>
+        </Link>
+        <button onClick={getSecret}>Tell Me a Secret!</button>
+        {profile && profile.secret && <p>{profile.secret}</p>}
+      </main>
+    </>
   );
 };
