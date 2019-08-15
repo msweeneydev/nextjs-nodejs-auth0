@@ -15,7 +15,6 @@ module.exports = async (req, res) => {
     json: true
   };
   const auth = await request(options);
-  console.log('BODYYYYY', auth);
   if (!auth.error) {
     res.writeHead(302, {
       Location: `/?id=${auth.id_token}&token=${auth.access_token}`
