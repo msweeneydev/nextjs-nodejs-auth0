@@ -51,14 +51,22 @@ export default () => {
       </Head>
       <main>
         <h1>Next.js + Node.js + Auth0</h1>
-        <Link href={`/api/auth/${!auth ? 'login' : 'logout'}/`}>
-          <a>
-            <button>{!auth ? 'Login' : 'Logout'}</button>
-          </a>
-        </Link>
-        <button onClick={getSecret}>Tell Me a Secret!</button>
+        <div className="buttons">
+          <button onClick={getSecret}>Tell Me a Secret!</button>
+          <Link href={`/api/auth/${!auth ? 'login' : 'logout'}/`}>
+            <a>
+              <button>{!auth ? 'Login' : 'Logout'}</button>
+            </a>
+          </Link>
+        </div>
         {profile && profile.secret && <p>{profile.secret}</p>}
       </main>
+      <style jsx>{`
+        .buttons {
+          display: flex;
+          justify-content: space-between;
+        }
+      `}</style>
     </>
   );
 };
