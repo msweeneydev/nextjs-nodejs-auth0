@@ -1,6 +1,7 @@
 const verify = require('../_util/token/verify');
 
 module.exports = async (req, res) => {
+  console.log('COOKIES', req.headers.cookie);
   isVerified = (err, decoded) => {
     if (!err) {
       res.send("You're logged in via Auth0!");
