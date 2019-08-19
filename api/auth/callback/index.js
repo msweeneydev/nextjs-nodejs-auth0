@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
       client_id: process.env.AUTH0_CLIENT_ID,
       client_secret: process.env.AUTH0_CLIENT_SECRET,
       code: req.query.code,
-      redirect_uri: 'http://localhost:3000/api/auth/callback/'
+      redirect_uri: `${process.env.AUTH0_REDIRECT_URI}/api/auth/callback/`
     },
     json: true
   };
