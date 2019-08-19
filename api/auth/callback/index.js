@@ -16,24 +16,20 @@ module.exports = async (req, res) => {
     json: true
   };
   const auth = await request(options);
+  const cookieOptions = {
+    httpOnly: false,
+    path: '/',
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 60 * 60 * 24
+  };
   if (!auth.error) {
     res.setHeader(
       'Set-Cookie',
-      cookie.serialize('id', String(auth.id_token), {
-        httpOnly: false,
-        path: '/',
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60 * 24
-      })
+      cookie.serialize('id', String(auth.id_token), cookieOptions)
     );
     res.setHeader(
       'Set-Cookie',
-      cookie.serialize('access', String(auth.access_token), {
-        httpOnly: false,
-        path: '/',
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60 * 24
-      })
+      cookie.serialize('access', String(auth.access_token), cookieOptions)
     );
     res.setHeader('Location', '/');
     res.status(302).end();

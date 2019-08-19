@@ -6,7 +6,7 @@ import parseJwt from '../lib/parseJwt';
 
 export default () => {
   const [auth, setAuth] = useState(false);
-  const [profile, setProfile] = useState(undefined);
+  const [profile, setProfile] = useState(null);
   useEffect(() => {
     function getAuth() {
       if (Cookies.get('access')) {
