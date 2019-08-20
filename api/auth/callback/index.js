@@ -23,14 +23,10 @@ module.exports = async (req, res) => {
     maxAge: 60 * 60 * 24
   };
   if (!auth.error) {
-    res.setHeader(
-      'Set-Cookie',
-      cookie.serialize('id', String(auth.id_token), cookieOptions)
-    );
-    res.setHeader(
-      'Set-Cookie',
+    res.setHeader('Set-Cookie', [
+      cookie.serialize('id', String(auth.id_token), cookieOptions),
       cookie.serialize('access', String(auth.access_token), cookieOptions)
-    );
+    ]);
     res.setHeader('Location', '/');
     res.status(302).end();
   }
