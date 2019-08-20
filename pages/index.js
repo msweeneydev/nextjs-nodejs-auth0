@@ -9,7 +9,7 @@ export default () => {
   const [profile, setProfile] = useState(null);
   useEffect(() => {
     function getAuth() {
-      if (Cookies.get('access')) {
+      if (Cookies.get('id')) {
         setAuth(true);
         setProfile(parseJwt(Cookies.get('id')));
         return null;

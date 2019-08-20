@@ -1,5 +1,5 @@
 const request = require('request-promise');
-var cookie = require('cookie');
+const cookie = require('cookie');
 
 module.exports = async (req, res) => {
   const options = {
@@ -16,16 +16,18 @@ module.exports = async (req, res) => {
     json: true
   };
   const auth = await request(options);
-  const cookieOptions = {
-    httpOnly: false,
-    path: '/',
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 60 * 60 * 24
+  const cookieOptions = (http = false) => {
+    return {
+      httpOnly: http,
+      path: '/',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 24
+    };
   };
   if (!auth.error) {
     res.setHeader('Set-Cookie', [
-      cookie.serialize('id', String(auth.id_token), cookieOptions),
-      cookie.serialize('access', String(auth.access_token), cookieOptions)
+      cookie.serialize('id', String(auth.id_token), cookieOptions()),
+      cookie.serialize('access', String(auth.access_token), cookieOptions(true))
     ]);
     res.setHeader('Location', '/');
     res.status(302).end();
