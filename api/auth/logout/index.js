@@ -6,18 +6,19 @@ module.exports = async (req, res) => {
     method: 'GET',
     url: `https://${process.env.AUTH0_DOMAIN}/v2/logout`
   };
-  const resp = await request(options);
+  await request(options);
   const cookieOptions = (http = false) => {
     return {
       httpOnly: http,
       path: '/',
       secure: process.env.NODE_ENV === 'production',
-      maxAge: Date.now()
+      maxAge: Date.now(),
+      sameSite: true
     };
   };
   res.setHeader(
     'Set-Cookie',
     cookie.serialize('access', '', cookieOptions(true))
   );
-  res.send(resp);
+  res.end();
 };
