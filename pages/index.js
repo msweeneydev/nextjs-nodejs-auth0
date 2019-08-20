@@ -9,20 +9,16 @@ export default () => {
   const [profile, setProfile] = useState(null);
   useEffect(() => {
     function getAuth() {
-      if (Cookies.get('id')) {
+      if (Cookies.get('id_token')) {
         setAuth(true);
-        setProfile(parseJwt(Cookies.get('id')));
+        setProfile(parseJwt(Cookies.get('id_token')));
         return null;
       }
     }
     getAuth();
   }, []);
   const getSecret = async () => {
-    const res = await fetch('/api/data/secret', {
-      headers: {
-        Authorization: `Bearer ${Cookies.get('access')}`
-      }
-    });
+    const res = await fetch('/api/data/secret');
     const secret = await res.text();
     const newProfile = { ...profile, secret };
     setProfile(newProfile);
@@ -30,8 +26,8 @@ export default () => {
   const logout = async () => {
     const res = await fetch('/api/auth/logout');
     if (res.status === 200) {
-      Cookies.remove('access');
-      Cookies.remove('id');
+      Cookies.remove('access_token');
+      Cookies.remove('id_token');
       setAuth(false);
       setProfile(null);
     }

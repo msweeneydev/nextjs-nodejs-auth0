@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
   };
   res.setHeader(
     'Set-Cookie',
-    cookie.serialize('access', '', cookieOptions(true))
+    cookie.serialize('access_token', '', cookieOptions(true))
   );
   res.end();
 };
