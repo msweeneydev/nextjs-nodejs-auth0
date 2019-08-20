@@ -1,7 +1,7 @@
 const verify = require('../_util/token/verify');
 
 module.exports = (req, res) => {
-  isVerified = err => {
+  const isVerified = err => {
     if (!err) {
       res.send("You're logged in via Auth0!");
     } else {
