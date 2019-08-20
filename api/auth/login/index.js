@@ -3,13 +3,14 @@ const uuidv4 = require('uuid/v4');
 const cookieOptions = require('../../_util/cookie/options');
 
 module.exports = async (req, res) => {
-  // generate random opaque value for state
+  // generate random opaque value for state and nonce
   const state = uuidv4();
-  // add state as httpOnly cookie for callback to check
-  res.setHeader(
-    'Set-Cookie',
-    cookie.serialize('state', String(state), cookieOptions(true))
-  );
+  const nonce = uuidv4();
+  // add state and nonce as httpOnly cookie for callback to check
+  res.setHeader('Set-Cookie', [
+    cookie.serialize('state', String(state), cookieOptions(true)),
+    cookie.serialize('nonce', String(nonce), cookieOptions(true))
+  ]);
   // write redirect
   res.writeHead(302, {
     Location: `https://${
@@ -18,7 +19,7 @@ module.exports = async (req, res) => {
       process.env.AUTH0_AUDIENCE
     }&client_id=${process.env.AUTH0_CLIENT_ID}&redirect_uri=${
       process.env.AUTH0_REDIRECT_URI
-    }/api/auth/callback/&scope=openid%20profile%20email&state=${state}`
+    }/api/auth/callback/&scope=openid%20profile%20email&state=${state}&nonce=${nonce}`
   });
   // send response
   res.end();

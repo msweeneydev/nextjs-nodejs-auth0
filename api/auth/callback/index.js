@@ -1,6 +1,7 @@
 const request = require('request-promise');
 const cookie = require('cookie');
 const cookieOptions = require('../../_util/cookie/options');
+const jwt = require('jsonwebtoken');
 
 module.exports = async (req, res) => {
   //  confirm state match to mitigate CSRF
@@ -23,19 +24,24 @@ module.exports = async (req, res) => {
     const auth = await request(options);
     // check no error on token exchange
     if (!auth.error) {
-      // add id_token (browser) and access_token (httpOnly) as cookies
-      res.setHeader('Set-Cookie', [
-        cookie.serialize('id_token', String(auth.id_token), cookieOptions()),
-        cookie.serialize(
-          'access_token',
-          String(auth.access_token),
-          cookieOptions(true)
-        )
-      ]);
-      // write redirect
       res.setHeader('Location', '/');
-      // send response
-      res.status(302).end();
+      //  confirm nonce match to mitigate token replay attack
+      if (req.cookies.nonce === jwt.decode(auth.id_token).nonce) {
+        // add id_token (browser) and access_token (httpOnly) as cookies
+        res.setHeader('Set-Cookie', [
+          cookie.serialize('id_token', String(auth.id_token), cookieOptions()),
+          cookie.serialize(
+            'access_token',
+            String(auth.access_token),
+            cookieOptions(true)
+          )
+        ]);
+        // send response
+        res.status(302).end();
+      } else {
+        // advise token replay attack possible if nonce's do not match
+        res.send('Nonce mismatch, potential token replay attack underway.');
+      }
     }
   } else {
     // advise CSRF attack likely if states do not match
