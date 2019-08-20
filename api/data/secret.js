@@ -8,5 +8,9 @@ module.exports = (req, res) => {
       res.send('Log in so I can tell you my secret!');
     }
   };
-  verify(req.cookies.access_token, isVerified);
+  if (req.cookies.access_token) {
+    verify(req.cookies.access_token, isVerified);
+  } else {
+    res.send('Log in so I can tell you my secret!');
+  }
 };
