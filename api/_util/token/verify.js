@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
 
-module.exports = async (req, callback) => {
+module.exports = (token, callback) => {
   const client = jwksClient({
     jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
   });
@@ -15,13 +15,13 @@ module.exports = async (req, callback) => {
     algorithms: ['RS256'],
     maxAge: '1 day'
   };
-  const { authorization } = req.headers;
-  if (authorization) {
-    const token = authorization.split(' ')[1];
+  if (!!token.length) {
     try {
       jwt.verify(token, getKey, options, callback);
     } catch (err) {
-      console.log('ERROR', err);
+      callback(err);
     }
+  } else {
+    callback(true);
   }
 };

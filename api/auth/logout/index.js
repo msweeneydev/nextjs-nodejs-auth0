@@ -1,8 +1,24 @@
+const request = require('request-promise');
+const cookie = require('cookie');
+
 module.exports = async (req, res) => {
-  res.writeHead(302, {
-    Location: `https://${process.env.AUTH0_DOMAIN}/v2/logout?client_id=${
-      process.env.AUTH0_CLIENT_ID
-    }&returnTo=${process.env.AUTH0_REDIRECT_URI}?logout=true`
-  });
+  const options = {
+    method: 'GET',
+    url: `https://${process.env.AUTH0_DOMAIN}/v2/logout`
+  };
+  await request(options);
+  const cookieOptions = (http = false) => {
+    return {
+      httpOnly: http,
+      path: '/',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: Date.now(),
+      sameSite: true
+    };
+  };
+  res.setHeader(
+    'Set-Cookie',
+    cookie.serialize('access', '', cookieOptions(true))
+  );
   res.end();
 };
