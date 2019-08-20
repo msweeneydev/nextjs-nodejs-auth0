@@ -26,7 +26,6 @@ export default () => {
   const logout = async () => {
     const res = await fetch('/api/auth/logout');
     if (res.status === 200) {
-      Cookies.remove('access_token');
       Cookies.remove('id_token');
       setAuth(false);
       setProfile(null);
