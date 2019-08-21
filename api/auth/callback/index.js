@@ -2,6 +2,7 @@ const request = require('request-promise');
 const cookie = require('cookie');
 const cookieOptions = require('../../_util/cookie/options');
 const jwt = require('jsonwebtoken');
+const { encrypt } = require('../../_util/token/encryption');
 
 module.exports = async (req, res) => {
   //  confirm state match to mitigate CSRF
@@ -27,12 +28,14 @@ module.exports = async (req, res) => {
       res.setHeader('Location', '/');
       //  confirm nonce match to mitigate token replay attack
       if (req.cookies.nonce === jwt.decode(auth.id_token).nonce) {
-        // add id_token (browser) and access_token (httpOnly) as cookies
+        // encrypt access token
+        const accessEncrypted = encrypt(auth.access_token);
+        // add id_token (browser) and access_token (httpOnly + encrypted) as cookies
         res.setHeader('Set-Cookie', [
           cookie.serialize('id_token', String(auth.id_token), cookieOptions()),
           cookie.serialize(
             'access_token',
-            String(auth.access_token),
+            String(accessEncrypted),
             cookieOptions(true)
           )
         ]);
