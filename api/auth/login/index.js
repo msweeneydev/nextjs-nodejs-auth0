@@ -8,8 +8,8 @@ module.exports = async (req, res) => {
   const nonce = uuidv4();
   // add state and nonce as httpOnly cookie for callback to check
   res.setHeader('Set-Cookie', [
-    cookie.serialize('state', String(state), cookieOptions(true)),
-    cookie.serialize('nonce', String(nonce), cookieOptions(true))
+    cookie.serialize('state', String(state), cookieOptions(true, false)),
+    cookie.serialize('nonce', String(nonce), cookieOptions(true, false))
   ]);
   // write redirect
   res.writeHead(302, {

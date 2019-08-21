@@ -32,11 +32,15 @@ module.exports = async (req, res) => {
         const accessEncrypted = encrypt(auth.access_token);
         // add id_token (browser) and access_token (httpOnly + encrypted) as cookies
         res.setHeader('Set-Cookie', [
-          cookie.serialize('id_token', String(auth.id_token), cookieOptions()),
+          cookie.serialize(
+            'id_token',
+            String(auth.id_token),
+            cookieOptions(false, true)
+          ),
           cookie.serialize(
             'access_token',
             String(accessEncrypted),
-            cookieOptions(true)
+            cookieOptions(true, true)
           )
         ]);
         // send response
